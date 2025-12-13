@@ -113,114 +113,116 @@
 
     <div id="success" style="display:none;">
       <h3 style="color:#ff0033;font-size:3.5rem;">YOUR SOUL IS RECORDED</h3>
-      <p>We will contact you via Instagram DM within 48h.</p>
+      <p style="font-size:1.8rem;margin:30px 0;">Order confirmed!<br>We will contact you via Instagram DM within 48h.</p>
+      <p style="color:#9B111E;font-size:1.4rem;">Thank you for joining the eclipse.</p>
       <button onclick="closeModal()" style="background:#111;padding:20px;margin-top:30px;">CLOSE</button>
-    </div>
-
-    <div style="margin-top:50px;">
-      <button onclick="if(prompt('Password?')==='aphelios666') adminDownload()" 
-              style="background:transparent;border:1px solid #400;color:#400;font-size:0.8rem;padding:10px;">
-        ADMIN: DOWNLOAD ENTRIES
-      </button>
     </div>
   </div>
 </div>
 
 <script>
-// PRODUCTS
-const productsDB = {
-  1: { name: "THORNED BAT HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png", thumbs: ["https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png"] },
-  2: { name: "DRIPPING CASTLE HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png", thumbs: ["https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png"] },
-  3: { name: "BAT THORN SLEEVE HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png", thumbs: ["https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png"] },
-  4: { name: "WHITE RAVEN CROSS HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png", thumbs: ["https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png"] }
-};
+  const BACKEND_URL = 'https://courageous-trust-production-53f0.up.railway.app';
 
-const urlParams = new URLSearchParams(window.location.search);
-const id = parseInt(urlParams.get('id')) || 1;
-const p = productsDB[id] || productsDB[1];
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = parseInt(urlParams.get('id')) || 1;
+  const productsDB = {
+    1: { name: "THORNED BAT HOODIE", price: "280 MAD", mainImg: "https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png" },
+    2: { name: "DRIPPING CASTLE HOODIE", price: "280 MAD", mainImg: "https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png" },
+    3: { name: "BAT THORN SLEEVE HOODIE", price: "280 MAD", mainImg: "https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png" },
+    4: { name: "WHITE RAVEN CROSS HOODIE", price: "280 MAD", mainImg: "https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png" }
+  };
+  const p = productsDB[id] || productsDB[1];
 
-document.title = `APHELIOS™ | ${p.name}`;
-document.getElementById("name").textContent = p.name;
-document.getElementById("price").textContent = p.price;
-document.getElementById("status").textContent = p.status;
-document.getElementById("main-img").src = p.mainImg;
-document.querySelector(".thumbs img").src = p.thumbs[0] || p.mainImg;
-document.getElementById("modal-product-name").textContent = p.name;
+  document.title = `APHELIOS™ | ${p.name}`;
+  document.getElementById("name").textContent = p.name;
+  document.getElementById("price").textContent = p.price;
+  document.getElementById("main-img").src = p.mainImg;
+  document.getElementById("modal-product-name").textContent = p.name;
 
-function changeImg(el) {
-  document.getElementById("main-img").src = el.src;
-  document.querySelectorAll(".thumbs img").forEach(i => i.classList.remove("active"));
-  el.classList.add("active");
-}
-
-document.getElementById("buy-btn").onclick = () => {
-  document.getElementById("checkout-modal").classList.add("active");
-};
-
-function pickSize(btn) {
-  document.querySelectorAll(".sizes button").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("r-size").value = btn.textContent;
-}
-
-function closeModal() {
-  document.getElementById("checkout-modal").classList.remove("active");
-}
-
-function submitEntry() {
-  const name = document.getElementById("r-name").value.trim();
-  const ig = document.getElementById("r-ig").value.trim();
-  const phone = document.getElementById("r-phone").value.trim();
-  const size = document.getElementById("r-size").value;
-
-  if (!name || !ig || !phone || !size) return alert("Complete all fields.");
-
-  const entry = `${new Date().toLocaleString()} | ${p.name} | ${name} | ${ig} | ${phone} | Size ${size}`;
-
-  let list = JSON.parse(localStorage.getItem("APHELIOS2025") || "[]");
-  list.push(entry);
-  localStorage.setItem("APHELIOS2025", JSON.stringify(list));
-  navigator.clipboard.writeText(entry);
-
-  const subject = "NEW APHELIOS ENTRY - " + p.name;
-  const body = entry + "\n\nIG: " + ig;
-  window.open(`https://mail.google.com/mail/u/0/?view=cm&fs=1&to=kalila.abdellatif@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
-
-  document.getElementById("final-submit").style.display = "none";
-  document.getElementById("success").style.display = "block";
-}
-
-function adminDownload() {
-  let all = JSON.parse(localStorage.getItem("APHELIOS2025") || "[]");
-  if (all.length === 0) return alert("No entries");
-  const txt = all.join("\n\n");
-  const blob = new Blob([txt], {type:"text/plain"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "APHELIOS_ENTRIES_" + new Date().toISOString().slice(0,10) + ".txt";
-  a.click();
-}
-
-// PARTICLES (disabled on mobile)
-if (!/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
-  const container = document.getElementById("product-particles");
-  function createParticle() {
-    const p = document.createElement("div");
-    p.style.cssText = `position:absolute;width:${Math.random()*6+3}px;height:${p.style.width};
-                       background:${Math.random()>0.4?"#9B111E":"#2c0000"};border-radius:50%;
-                       opacity:${Math.random()*0.7+0.2};left:${Math.random()*100}vw;top:-10px;
-                       box-shadow:0 0 12px #9B111E;animation:fall ${Math.random()*15+15}s linear forwards`;
-    container.appendChild(p);
-    setTimeout(() => p.remove(), 30000);
+  function changeImg(el) {
+    document.getElementById("main-img").src = el.src;
+    document.querySelectorAll(".thumbs img").forEach(i => i.classList.remove("active"));
+    el.classList.add("active");
   }
-  setInterval(createParticle, 250);
-  for(let i=0;i<60;i++) setTimeout(createParticle,i*100);
 
-  const style = document.createElement("style");
-  style.textContent = `@keyframes fall{0%{transform:translateY(-100px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}`;
-  document.head.appendChild(style);
-}
+  document.getElementById("buy-btn").onclick = () => {
+    document.getElementById("checkout-modal").classList.add("active");
+  };
+
+  function pickSize(btn) {
+    document.querySelectorAll(".sizes button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("r-size").value = btn.textContent;
+  }
+
+  function closeModal() {
+    document.getElementById("checkout-modal").classList.remove("active");
+  }
+
+  async function submitEntry() {
+    const name = document.getElementById("r-name").value.trim();
+    const ig = document.getElementById("r-ig").value.trim();
+    const phone = document.getElementById("r-phone").value.trim();
+    const size = document.getElementById("r-size").value;
+
+    if (!name || !ig || !phone || !size) return alert("Complete all fields.");
+
+    const btn = document.getElementById("final-submit");
+    btn.disabled = true;
+    btn.textContent = "Processing...";
+
+    const orderData = {
+      name,
+      ig,
+      phone,
+      size,
+      product: p.name,
+      price: p.price,
+      timestamp: new Date().toLocaleString('fr-MA')
+    };
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        document.getElementById("final-submit").style.display = "none";
+        document.getElementById("success").style.display = "block";
+      } else {
+        alert("Failed – try again");
+        btn.disabled = false;
+        btn.textContent = "SUBMIT TO THE VOID";
+      }
+    } catch (err) {
+      alert("No connection");
+      btn.disabled = false;
+      btn.textContent = "SUBMIT TO THE VOID";
+    }
+  }
+
+  if (!/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+    const container = document.getElementById("product-particles");
+    function createParticle() {
+      const p = document.createElement("div");
+      p.style.cssText = `position:absolute;width:${Math.random()*6+3}px;height:${p.style.width};
+                         background:${Math.random()>0.4?"#9B111E":"#2c0000"};border-radius:50%;
+                         opacity:${Math.random()*0.7+0.2};left:${Math.random()*100}vw;top:-10px;
+                         box-shadow:0 0 12px #9B111E;animation:fall ${Math.random()*15+15}s linear forwards`;
+      container.appendChild(p);
+      setTimeout(() => p.remove(), 30000);
+    }
+    setInterval(createParticle, 250);
+    for(let i=0;i<60;i++) setTimeout(createParticle,i*100);
+
+    const style = document.createElement("style");
+    style.textContent = `@keyframes fall{0%{transform:translateY(-100px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}`;
+    document.head.appendChild(style);
+  }
 </script>
 
 </body>
