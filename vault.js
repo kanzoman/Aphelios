@@ -1,8 +1,8 @@
 const pastDrops = [
-  { name: "BLOOD ECLIPSE HOODIE", pieces: "000/150", img: "https://cdn.jsdelivr.net/gh/aphelios/assets/drop1.jpg", link: "product.html?id=1" },
-  { name: "SHADOW ABAYA 001", pieces: "SOLD OUT", img: "https://cdn.jsdelivr.net/gh/aphelios/assets/abaya-past.jpg", link: "#" },
-  { name: "RITUAL CARGO", pieces: "000/120", img: "https://cdn.jsdelivr.net/gh/aphelios/assets/cargo-past.jpg", link: "#" },
-  { name: "LUNAR THERMAL", pieces: "ENDED", img: "https://cdn.jsdelivr.net/gh/aphelios/assets/thermal.jpg", link: "#" },
+  { name: "THORNED BAT HOODIE", pieces: "01/10", img: "https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png", link: "product.html?id=1" },
+  { name: "WHITE RAVEN CROSS HOODIE", pieces: "SOLD OUT", img: "https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png", link: "#" },
+  { name: "BAT THORN SLEEVE HOODIE", pieces: "04/10", img: "https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png", link: "product.html?id=3" },
+  { name: "DRIPPING CASTLE HOODIE", pieces: "ENDED", img: "https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png", link: "#" },
 ];
 
 const container = document.querySelector(".products");

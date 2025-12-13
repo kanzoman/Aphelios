@@ -47,7 +47,7 @@ const products = [
   { id: 1, name: "THORNED BAT HOODIE", price: "280 MAD", img: "https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png", sold: false },
   { id: 2, name: "DRIPPING CASTLE HOODIE", price: "280 MAD", img: "https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png", sold: false },
   { id: 3, name: "BAT THORN SLEEVE HOODIE", price: "280 MAD", img: "https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png", sold: false },
-  { id: 4, name: "WHITE RAVEN CROSS HOODIE", price: "280 MAD", img: "https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png", sold: false },
+  { id: 4, name: "WHITE RAVEN CROSS HOODIE", price: "280 MAD", img: "https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png", sold: true },
 ];
 
   products.forEach(p => {
