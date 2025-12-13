@@ -39,20 +39,20 @@ pool.query(`
 
 app.post('/order', async (req, res) => {
   try {
-    const data = req.body;
-    if (!data.name || !data.phone || !data.product) return res.status(400).json({ success: false });
+    const { name, ig, phone, address, size, product, price } = req.body;
+    if (!name || !phone || !product) return res.status(400).json({ success: false });
 
     const orderId = 'APHELIOS-' + Date.now();
 
     await pool.query(
       `INSERT INTO orders (order_id, timestamp, name, ig, phone, address, size, product, price)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-      [orderId, new Date().toLocaleString('fr-MA'), data.name, data.ig || '', data.phone, data.address || '', data.size || '', data.product, data.price || '']
+      [orderId, new Date().toLocaleString('fr-MA'), name, ig || '', phone, address || '', size || '', product, price || '']
     );
 
     res.json({ success: true, orderId });
   } catch (err) {
-    console.error(err);
+    console.error('DB error:', err.message);
     res.status(500).json({ success: false });
   }
 });
