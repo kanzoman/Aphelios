@@ -54,24 +54,6 @@ app.post('/order', async (req, res) => {
     );
 
     res.json({ success: true, orderId });
-    // Auto WhatsApp alert
-const customerPhone = req.body.phone?.replace(/[^0-9]/g, '') || 'unknown';
-const msg = encodeURIComponent(
-  `New APHELIOS order!\n` +
-  `ID: ${orderId}\n` +
-  `Name: ${req.body.name}\n` +
-  `IG: ${req.body.ig || 'none'}\n` +
-  `Phone: ${req.body.phone}\n` +
-  `Address: ${req.body.address || 'none'}\n` +
-  `Size: ${req.body.size || 'none'}\n` +
-  `Product: ${req.body.product}\n` +
-  `Price: ${req.body.price || 'none'}`
-);
-
-// Replace 212YOURPHONE with your number (e.g. 212600000000)
-const yourPhone = '212656660174';
-
-fetch(`https://api.whatsapp.com/send?phone=${yourPhone}&text=${msg}`);
   } catch (err) {
     console.error('DB error:', err.message);
     res.status(500).json({ success: false });
