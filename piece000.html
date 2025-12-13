@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APHELIOS™ | PIECE 000</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- RED BLOOD ECLIPSE FAVICON -->
+<link rel="icon" type="image/x-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+  <style>
+    body { background:#000; color:#9B111E; overflow:hidden; height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .container { font-family:'Cinzel',serif; padding:20px; }
+    h1 { font-size:10rem; margin:0; text-shadow:0 0 80px #9B111E; }
+    p { font-size:2.2rem; letter-spacing:8px; margin:30px 0; }
+    .price { font-size:4rem; margin:40px 0; }
+    .claim-btn { padding:30px 100px; background:#9B111E; color:#000; font-size:2.5rem; border:none; cursor:pointer; box-shadow:0 0 60px #9B111E; transition:0.6s; }
+    .claim-btn:hover { transform:scale(1.1); background:#ff0033; }
+    .warning { margin-top:80px; opacity:0.6; font-size:1.3rem; }
+
+    /* SAME MODAL AS PRODUCT PAGE */
+    #checkout-modal { position:fixed; inset:0; z-index:99999; opacity:0; pointer-events:none; display:flex; align-items:center; justify-content:center; transition:0.6s; }
+    #checkout-modal.active { opacity:1; pointer-events:all; }
+    .modal-overlay { position:absolute; inset:0; background:#000000e0; z-index:1; }
+    .modal-content { position:relative; z-index:2; background:#0a0000; width:90%; max-width:550px; padding:60px 30px; border:4px solid #9B111E; box-shadow:0 0 120px #9B111E; text-align:center; color:#ccc; }
+    .modal-content input { width:100%; padding:20px; margin:15px 0; background:#111; border:1px solid #600; color:white; font-size:1.3rem; }
+    .sizes button { padding:18px; margin:6px; background:#111; border:2px solid #600; color:#888; }
+    .sizes button.active { background:#9B111E; color:#000; border-color:#ff0033; box-shadow:0 0 40px #9B111E; }
+    #piece-submit { width:100%; padding:25px; background:#9B111E; color:#000; border:none; font-size:2rem; margin-top:30px; cursor:pointer; }
+    .modal-hidden { display:none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>PIECE 000</h1>
+  <p>ONE OF ONE · NEVER AGAIN</p>
+  <div class="price">25 000 MAD</div>
+  <button class="claim-btn" id="claim-btn">CLAIM BEFORE IT VANISHES</button>
+  <p class="warning">You were never supposed to find this.<br>The eclipse remembers everything.</p>
+</div>
+
+<!-- PIECE 000 CHECKOUT MODAL -->
+<div id="checkout-modal">
+  <div class="modal-overlay" onclick="closeModal()"></div>
+  <div class="modal-content">
+    <h2>PIECE 000</h2>
+    <p style="font-size:2.5rem;color:#9B111E;margin:30px 0;">ONE SOUL ONLY</p>
+
+    <input type="text" id="r-name" placeholder="FULL NAME" required>
+    <input type="text" id="r-ig" placeholder="@INSTAGRAM" required>
+    <input type="tel" id="r-phone" placeholder="+212 PHONE / WHATSAPP" required>
+    <input type="text" id="r-address" placeholder="FULL SHIPPING ADDRESS" required>
+
+    <div class="sizes">
+      <button type="button" onclick="pickSize(this)">XS</button>
+      <button type="button" onclick="pickSize(this)">S</button>
+      <button type="button" onclick="pickSize(this)">M</button>
+      <button type="button" onclick="pickSize(this)">L</button>
+      <button type="button" onclick="pickSize(this)">XL</button>
+      <button type="button" onclick="pickSize(this)">XXL</button>
+    </div>
+    <input type="hidden" id="r-size">
+
+    <button id="piece-submit" onclick="submitPiece000()">BIND YOUR SOUL · 25 000 MAD</button>
+
+    <div id="success" class="modal-hidden">
+      <h3 style="color:#ff0033;font-size:4rem;">THE CONTRACT IS SEALED</h3>
+      <p>We will contact you within 24h to complete payment.<br>Your soul now belongs to the eclipse.</p>
+      <button onclick="closeModal()" style="background:#111;margin-top:40px;padding:20px;">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// SAME MODAL LOGIC AS PRODUCT PAGE
+document.getElementById("claim-btn").onclick = () => {
+  document.getElementById("checkout-modal").classList.add("active");
+};
+
+function pickSize(btn) {
+  document.querySelectorAll(".sizes button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("r-size").value = btn.textContent;
+}
+
+function closeModal() {
+  document.getElementById("checkout-modal").classList.remove("active");
+}
+
+// SUBMIT + AUTO-GMAIL (WORKS ON PC + PHONE)
+function submitPiece000() {
+  const name = document.getElementById("r-name").value.trim();
+  const ig = document.getElementById("r-ig").value.trim();
+  const phone = document.getElementById("r-phone").value.trim();
+  const address = document.getElementById("r-address").value.trim();
+  const size = document.getElementById("r-size").value;
+
+  if (!name || !ig || !phone || !address || !size) return alert("Complete the ritual.");
+
+  const entry = `${new Date().toLocaleString()} | PIECE 000 | ${name} | ${ig} | ${phone} | ${address} | Size ${size} | 25 000 MAD`;
+
+  // Save + copy
+  let list = JSON.parse(localStorage.getItem("APHELIOS2025") || "[]");
+  list.push(entry);
+  localStorage.setItem("APHELIOS2025", JSON.stringify(list));
+  navigator.clipboard.writeText(entry);
+
+  // Open Gmail instantly (PC + phone)
+  const subject = "PIECE 000 CLAIMED — 25K MAD";
+  const body = entry + "\n\nThe eclipse has chosen.";
+  window.open(`https://mail.google.com/mail/u/0/?view=cm&fs=1&to=kalila.abdellatif@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+
+  // Success
+  document.getElementById("piece-submit").classList.add("modal-hidden");
+  document.getElementById("success").classList.remove("modal-hidden");
+}
+</script>
+
+<!-- Keep your blood particles if you want -->
+<div id="product-particles"></div>
+<script>
+// Same particles as product page (copy from there if you want)
+</script>
+
+</body>
+</html>

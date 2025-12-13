@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <title>APHELIOS™</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Unica+One&display=swap" rel="stylesheet">
+  
+  <!-- Favicon & Apple Touch Icon -->
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:,">
+  <!-- RED BLOOD ECLIPSE FAVICON -->
+<link rel="icon" type="image/x-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+  <audio id="ambience" loop>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</audio>
+</head>
+<body>
+
+
+<!-- PASSWORD GATE UPGRADED -->
+<div id="password-gate">
+  <div class="eclipse-bg"></div>
+  <div class="lightning"></div>
+  <div class="lightning"></div>
+  <div class="lightning"></div>
+
+  <div class="gate-content">
+    <h1>APHELIOS™</h1>
+    <p>ENTER THE ECLIPSE</p>
+    <input type="password" id="password-input" placeholder="PASSWORD" autocomplete="off"/>
+    <button onclick="checkPassword()">></button>
+    <p class="wrong">Wrong password</p>
+  </div>
+</div>
+  <!-- MAIN SITE -->
+  <div id="main-site" class="hidden">
+    <div id="blood-ash"></div>
+    <div id="lightning-overlay" class="lightning-overlay"></div>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+      <div class="eclipse-loader"></div>
+    </div>
+
+    <header>
+        <div class="logo" id="secret-trigger" style="cursor:pointer; user-select:none;">APHELIOS™</div>      <div class="arabic-hidden">أفيليوس · ظلام القمر</div>
+        <nav>
+    <a href="#drops" class="smooth-scroll">DROPS</a>
+    <a href="vault.html">ARCHIVE</a>   <!-- ← this now goes to the vault -->
+      </nav>
+      <div id="swipe-up" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:999;
+     background:#9B111E;padding:15px 30px;border-radius:50px;color:#000;font-weight:bold;
+     animation:up 2s infinite;display:none;">
+  ↑ SWIPE UP TO ENTER ↑
+</div>
+<script>
+if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+  document.getElementById("swipe-up").style.display = "block";
+}
+</script>
+    </header>
+
+    <section class="hero">
+      <video autoplay muted loop playsinline>
+        <source src="https://cdn.jsdelivr.net/gh/aphelios/assets/redmoon.mp4" type="video/mp4">
+      </video>
+      <div class="overlay">
+        <h1>BLOOD ECLIPSE</h1>
+        <p>Drop 001 — 150 pieces — Never restocked</p>
+        <div class="countdown" id="countdown"></div>
+        <a href="#drops" class="enter-btn">ENTER THE ECLIPSE</a>
+      </div>
+    </section>
+
+    <section id="drops" class="products">
+      <!-- Products will be injected by JS -->
+    </section>
+
+    <footer>
+      <p>© 2025 APHELIOS™ Morocco • All rights reserved</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+// Smooth scroll for DROPS link
+document.querySelectorAll('.smooth-scroll').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#drops').scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
+</script>
+<script>
+// PWA "Add to Home Screen" prompt (iOS + Android)
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // You can show a custom "Add to Home" button later
+});
+</script>
+</body>
+</html>

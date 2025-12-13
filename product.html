@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>APHELIOS™ | PRODUCT</title>
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/VYMRc3gB/image-2025-11-29-233515082-removebg-preview.png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Unica+One&display=swap" rel="stylesheet">
+
+  <style>
+    body { background:#000; color:#ccc; font-family:'Unica One',monospace; margin:0; overflow-x:hidden; }
+    header { position:fixed; top:0; left:0; width:100%; padding:20px 5%; display:flex; justify-content:space-between; align-items:center; z-index:100; backdrop-filter:blur(10px); background:rgba(0,0,0,0.6); }
+    .logo { font-family:'Cinzel',serif; font-size:2.2rem; color:#9B111E; letter-spacing:6px; }
+    nav a { color:#ccc; text-decoration:none; font-size:1.2rem; }
+
+    .container { max-width:1400px; margin:0 auto; padding:120px 5% 80px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+
+    #main-img { width:100%; box-shadow:0 0 80px rgba(155,17,30,0.8); transition:0.6s; border-radius:8px; }
+    #main-img:hover { transform:scale(1.03); box-shadow:0 0 120px #9B111E; }
+
+    .thumbs { display:flex; gap:20px; margin-top:30px; flex-wrap:wrap; }
+    .thumbs img { width:100%; max-width:160px; opacity:0.6; border:3px solid transparent; transition:0.4s; cursor:pointer; border-radius:6px; }
+    .thumbs img:hover, .thumbs img.active { opacity:1; border-color:#9B111E; box-shadow:0 0 40px #9B111E; }
+
+    .product-info h1 { font-family:'Cinzel',serif; font-size:4.5rem; color:#9B111E; margin:0; letter-spacing:4px; }
+    #price { font-size:2.8rem; margin:30px 0; }
+    #status { font-size:3.2rem; color:#9B111E; margin:40px 0; font-weight:bold; }
+
+    #buy-btn { width:100%; padding:28px; background:#9B111E; color:#000; border:none; font-size:2rem; font-weight:bold; cursor:pointer; margin-top:50px; box-shadow:0 0 60px #9B111E; transition:0.4s; }
+    #buy-btn:hover { background:#ff0033; transform:scale(1.05); }
+
+    .info-text { margin-top:50px; opacity:0.7; line-height:1.8; font-size:1.2rem; }
+
+    #product-particles { position:fixed; inset:0; pointer-events:none; z-index:2; }
+
+    /* MODAL */
+    #checkout-modal { position:fixed; inset:0; z-index:99999; opacity:0; pointer-events:none; display:flex; align-items:center; justify-content:center; transition:0.6s; background:rgba(0,0,0,0.9); }
+    #checkout-modal.active { opacity:1; pointer-events:all; }
+    .modal-content { background:#0a0000; width:90%; max-width:550px; padding:60px 30px; border:4px solid #9B111E; box-shadow:0 0 120px #9B111E; text-align:center; color:#ccc; border-radius:12px; }
+    .modal-content input { width:100%; padding:20px; margin:15px 0; background:#111; border:1px solid #600; color:white; font-size:1.4rem; border-radius:6px; }
+    .sizes { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:20px 0; }
+    .sizes button { padding:20px; background:#111; border:2px solid #600; color:#ccc; font-size:1.3rem; border-radius:6px; }
+    .sizes button.active { background:#9B111E; color:#000; border-color:#ff0033; box-shadow:0 0 40px #9B111E; }
+    #final-submit { width:100%; padding:25px; background:#9B111E; color:#000; border:none; font-size:1.8rem; margin-top:30px; cursor:pointer; border-radius:8px; }
+
+    /* MOBILE */
+    @media (max-width:768px) {
+      .container { grid-template-columns:1fr; gap:50px; padding-top:100px; }
+      .product-info h1 { font-size:3.5rem; }
+      #price { font-size:2.2rem; }
+      #status { font-size:2.6rem; }
+      .thumbs img { max-width:120px; }
+      #checkout-modal.active { align-items:flex-end; }
+      .modal-content { border-radius:20px 20px 0 0; width:100%; max-width:none; padding:50px 20px; }
+      .sizes { grid-template-columns:repeat(3,1fr); }
+      #product-particles { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="product-particles"></div>
+
+<header>
+  <div class="logo">APHELIOS™</div>
+  <nav><a href="index.html">← BACK TO ECLIPSE</a></nav>
+</header>
+
+<div class="container">
+  <div>
+    <img id="main-img" src="" alt="Product">
+    <div class="thumbs">
+      <img src="" onclick="changeImg(this)" class="active">
+    </div>
+  </div>
+
+  <div class="product-info">
+    <h1 id="name"></h1>
+    <p id="price"></p>
+    <p id="status">BUY OPEN</p>
+    <button id="buy-btn">CLAIM YOUR PIECE</button>
+    <p class="info-text">
+      280 MAD • Limited drop • One per soul<br>
+      Made in Marrakech • Ships from the shadows
+    </p>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkout-modal">
+  <div class="modal-overlay" onclick="closeModal()"></div>
+  <div class="modal-content">
+    <h2>APHELIOS™</h2>
+    <p id="modal-product-name" style="font-size:2.5rem;color:#9B111E;margin:30px 0;"></p>
+
+    <input type="text" id="r-name" placeholder="FULL NAME" required>
+    <input type="text" id="r-ig" placeholder="@INSTAGRAM (we will DM you)" required>
+    <input type="tel" id="r-phone" placeholder="+212 PHONE / WHATSAPP" required>
+
+    <div class="sizes">
+      <button type="button" onclick="pickSize(this)">XS</button>
+      <button type="button" onclick="pickSize(this)">S</button>
+      <button type="button" onclick="pickSize(this)">M</button>
+      <button type="button" onclick="pickSize(this)">L</button>
+      <button type="button" onclick="pickSize(this)">XL</button>
+      <button type="button" onclick="pickSize(this)">XXL</button>
+    </div>
+    <input type="hidden" id="r-size">
+
+    <button id="final-submit" onclick="submitEntry()">SUBMIT TO THE VOID</button>
+
+    <div id="success" style="display:none;">
+      <h3 style="color:#ff0033;font-size:3.5rem;">YOUR SOUL IS RECORDED</h3>
+      <p>We will contact you via Instagram DM within 48h.</p>
+      <button onclick="closeModal()" style="background:#111;padding:20px;margin-top:30px;">CLOSE</button>
+    </div>
+
+    <div style="margin-top:50px;">
+      <button onclick="if(prompt('Password?')==='aphelios666') adminDownload()" 
+              style="background:transparent;border:1px solid #400;color:#400;font-size:0.8rem;padding:10px;">
+        ADMIN: DOWNLOAD ENTRIES
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// PRODUCTS
+const productsDB = {
+  1: { name: "THORNED BAT HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png", thumbs: ["https://i.ibb.co/dJ47zJNP/Gemini-Generated-Image-kcsoa4kcsoa4kcso.png"] },
+  2: { name: "DRIPPING CASTLE HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png", thumbs: ["https://i.ibb.co/HLKxCDBm/Gemini-Generated-Image-qj4vugqj4vugqj4v.png"] },
+  3: { name: "BAT THORN SLEEVE HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png", thumbs: ["https://i.postimg.cc/6QHzPh6V/Gemini-Generated-Image-vrz34cvrz34cvrz3.png"] },
+  4: { name: "WHITE RAVEN CROSS HOODIE", price: "280 MAD", status: "BUY OPEN", mainImg: "https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png", thumbs: ["https://i.postimg.cc/vBVq6VMN/Design-sans-titre.png"] }
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+const id = parseInt(urlParams.get('id')) || 1;
+const p = productsDB[id] || productsDB[1];
+
+document.title = `APHELIOS™ | ${p.name}`;
+document.getElementById("name").textContent = p.name;
+document.getElementById("price").textContent = p.price;
+document.getElementById("status").textContent = p.status;
+document.getElementById("main-img").src = p.mainImg;
+document.querySelector(".thumbs img").src = p.thumbs[0] || p.mainImg;
+document.getElementById("modal-product-name").textContent = p.name;
+
+function changeImg(el) {
+  document.getElementById("main-img").src = el.src;
+  document.querySelectorAll(".thumbs img").forEach(i => i.classList.remove("active"));
+  el.classList.add("active");
+}
+
+document.getElementById("buy-btn").onclick = () => {
+  document.getElementById("checkout-modal").classList.add("active");
+};
+
+function pickSize(btn) {
+  document.querySelectorAll(".sizes button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("r-size").value = btn.textContent;
+}
+
+function closeModal() {
+  document.getElementById("checkout-modal").classList.remove("active");
+}
+
+function submitEntry() {
+  const name = document.getElementById("r-name").value.trim();
+  const ig = document.getElementById("r-ig").value.trim();
+  const phone = document.getElementById("r-phone").value.trim();
+  const size = document.getElementById("r-size").value;
+
+  if (!name || !ig || !phone || !size) return alert("Complete all fields.");
+
+  const entry = `${new Date().toLocaleString()} | ${p.name} | ${name} | ${ig} | ${phone} | Size ${size}`;
+
+  let list = JSON.parse(localStorage.getItem("APHELIOS2025") || "[]");
+  list.push(entry);
+  localStorage.setItem("APHELIOS2025", JSON.stringify(list));
+  navigator.clipboard.writeText(entry);
+
+  const subject = "NEW APHELIOS ENTRY - " + p.name;
+  const body = entry + "\n\nIG: " + ig;
+  window.open(`https://mail.google.com/mail/u/0/?view=cm&fs=1&to=kalila.abdellatif@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+
+  document.getElementById("final-submit").style.display = "none";
+  document.getElementById("success").style.display = "block";
+}
+
+function adminDownload() {
+  let all = JSON.parse(localStorage.getItem("APHELIOS2025") || "[]");
+  if (all.length === 0) return alert("No entries");
+  const txt = all.join("\n\n");
+  const blob = new Blob([txt], {type:"text/plain"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "APHELIOS_ENTRIES_" + new Date().toISOString().slice(0,10) + ".txt";
+  a.click();
+}
+
+// PARTICLES (disabled on mobile)
+if (!/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+  const container = document.getElementById("product-particles");
+  function createParticle() {
+    const p = document.createElement("div");
+    p.style.cssText = `position:absolute;width:${Math.random()*6+3}px;height:${p.style.width};
+                       background:${Math.random()>0.4?"#9B111E":"#2c0000"};border-radius:50%;
+                       opacity:${Math.random()*0.7+0.2};left:${Math.random()*100}vw;top:-10px;
+                       box-shadow:0 0 12px #9B111E;animation:fall ${Math.random()*15+15}s linear forwards`;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 30000);
+  }
+  setInterval(createParticle, 250);
+  for(let i=0;i<60;i++) setTimeout(createParticle,i*100);
+
+  const style = document.createElement("style");
+  style.textContent = `@keyframes fall{0%{transform:translateY(-100px) rotate(0deg);opacity:0}10%{opacity:1}100%{transform:translateY(110vh) rotate(360deg);opacity:0}}`;
+  document.head.appendChild(style);
+}
+</script>
+
+</body>
+</html>
