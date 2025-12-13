@@ -121,7 +121,7 @@
 </div>
 
 <script>
-  const BACKEND_URL = 'aphelios-production.up.railway.app';
+  const BACKEND_URL = 'https://courageous-trust-production-53f0.up.railway.app';
 
   const urlParams = new URLSearchParams(window.location.search);
   const id = parseInt(urlParams.get('id')) || 1;
@@ -160,55 +160,55 @@
   }
 
   async function submitEntry() {
-  const name = document.getElementById("r-name").value.trim();
-  const ig = document.getElementById("r-ig").value.trim();
-  const phone = document.getElementById("r-phone").value.trim();
-  const size = document.getElementById("r-size").value;
+    const name = document.getElementById("r-name").value.trim();
+    const ig = document.getElementById("r-ig").value.trim();
+    const phone = document.getElementById("r-phone").value.trim();
+    const size = document.getElementById("r-size").value;
 
-  if (!name || !ig || !phone || !size) return alert("Complete all fields.");
-
-  const btn = document.getElementById("final-submit");
-  btn.disabled = true;
-  btn.textContent = "Processing...";
-
-  const orderData = {
-    name,
-    ig,
-    phone,
-    size,
-    product: p.name,
-    price: p.price,
-    timestamp: new Date().toLocaleString('fr-MA')
-  };
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/order`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderData)
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (!name || !ig || !phone || !size) {
+      alert("Complete all fields.");
+      return;
     }
 
-    const result = await response.json();
+    const btn = document.getElementById("final-submit");
+    btn.disabled = true;
+    btn.textContent = "SENDING...";
 
-    if (result.success) {
-      document.getElementById("final-submit").style.display = "none";
-      document.getElementById("success").style.display = "block";
-    } else {
-      alert("Order failed – try again");
+    const orderData = {
+      name,
+      ig,
+      phone,
+      size,
+      product: p.name,
+      price: p.price
+    };
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) throw new Error("Server error");
+
+      const result = await response.json();
+
+      if (result.success) {
+        document.getElementById("final-submit").style.display = "none";
+        document.getElementById("success").style.display = "block";
+      } else {
+        alert("Order failed");
+      }
+    } catch (err) {
+      alert("No connection");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "SUBMIT TO THE VOID";
     }
-  } catch (err) {
-    console.error(err);
-    alert("No connection – check internet or server");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "SUBMIT TO THE VOID";
   }
-}
 
+  // Particles code stays the same
   if (!/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
     const container = document.getElementById("product-particles");
     function createParticle() {
@@ -228,6 +228,5 @@
     document.head.appendChild(style);
   }
 </script>
-
 </body>
 </html>

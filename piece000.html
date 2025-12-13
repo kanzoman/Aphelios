@@ -73,10 +73,11 @@
 </div>
 
 <script>
-// SAME MODAL LOGIC AS PRODUCT PAGE
-document.getElementById("claim-btn").onclick = () => {
+const BACKEND_URL = 'https://courageous-trust-production-53f0.up.railway.app';
+
+function openModal() {
   document.getElementById("checkout-modal").classList.add("active");
-};
+}
 
 function pickSize(btn) {
   document.querySelectorAll(".sizes button").forEach(b => b.classList.remove("active"));
@@ -88,32 +89,49 @@ function closeModal() {
   document.getElementById("checkout-modal").classList.remove("active");
 }
 
-// SUBMIT + AUTO-GMAIL (WORKS ON PC + PHONE)
-function submitPiece000() {
+async function submitPiece000() {
   const name = document.getElementById("r-name").value.trim();
   const ig = document.getElementById("r-ig").value.trim();
   const phone = document.getElementById("r-phone").value.trim();
   const address = document.getElementById("r-address").value.trim();
   const size = document.getElementById("r-size").value;
 
-  if (!name || !ig || !phone || !address || !size) return alert("Complete the ritual.");
+  if (!name || !ig || !phone || !address || !size) {
+    alert("Complete the ritual.");
+    return;
+  }
 
-  const entry = `${new Date().toLocaleString()} | PIECE 000 | ${name} | ${ig} | ${phone} | ${address} | Size ${size} | 25 000 MAD`;
+  const orderData = {
+    name, ig, phone, address, size,
+    product: "PIECE 000",
+    price: "25 000 MAD"
+  };
 
-  // Save + copy
-  let list = JSON.parse(localStorage.getItem("APHELIOS2025") || "[]");
-  list.push(entry);
-  localStorage.setItem("APHELIOS2025", JSON.stringify(list));
-  navigator.clipboard.writeText(entry);
+  const btn = document.getElementById("piece-submit");
+  btn.disabled = true;
+  btn.textContent = "SENDING...";
 
-  // Open Gmail instantly (PC + phone)
-  const subject = "PIECE 000 CLAIMED — 25K MAD";
-  const body = entry + "\n\nThe eclipse has chosen.";
-  window.open(`https://mail.google.com/mail/u/0/?view=cm&fs=1&to=kalila.abdellatif@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+  try {
+    const response = await fetch(`${BACKEND_URL}/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
 
-  // Success
-  document.getElementById("piece-submit").classList.add("modal-hidden");
-  document.getElementById("success").classList.remove("modal-hidden");
+    const result = await response.json();
+
+    if (result.success) {
+      document.getElementById("piece-submit").classList.add("modal-hidden");
+      document.getElementById("success").classList.remove("modal-hidden");
+    } else {
+      alert("Failed – try again");
+    }
+  } catch (err) {
+    alert("No connection – try again");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "SUBMIT THE CLAIM";
+  }
 }
 </script>
 
