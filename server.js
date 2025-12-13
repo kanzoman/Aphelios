@@ -22,10 +22,9 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
-// Drop and recreate table to fix missing column
-pool.query('DROP TABLE IF EXISTS orders').catch(() => {});
+// Only create table if not exists (safe for production)
 pool.query(`
-  CREATE TABLE orders (
+  CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
     order_id TEXT UNIQUE,
     timestamp TEXT,
@@ -38,7 +37,7 @@ pool.query(`
     price TEXT,
     created_at TIMESTAMP DEFAULT NOW()
   )
-`);
+`).catch(() => {});
 
 // POST /order
 app.post('/order', async (req, res) => {
