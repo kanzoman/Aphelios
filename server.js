@@ -16,13 +16,16 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Database
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
+// Drop and recreate table to fix missing column
+pool.query('DROP TABLE IF EXISTS orders').catch(() => {});
 pool.query(`
-  CREATE TABLE IF NOT EXISTS orders (
+  CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     order_id TEXT UNIQUE,
     timestamp TEXT,
@@ -35,8 +38,9 @@ pool.query(`
     price TEXT,
     created_at TIMESTAMP DEFAULT NOW()
   )
-`).catch(() => {});
+`);
 
+// POST /order
 app.post('/order', async (req, res) => {
   try {
     const { name, ig, phone, address, size, product, price } = req.body;
@@ -57,9 +61,14 @@ app.post('/order', async (req, res) => {
   }
 });
 
+// GET /orders
 app.get('/orders', async (req, res) => {
-  const { rows } = await pool.query('SELECT * FROM orders ORDER BY created_at DESC');
-  res.json(rows);
+  try {
+    const { rows } = await pool.query('SELECT * FROM orders ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    res.json([]);
+  }
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, () => console.log('Server running'));
