@@ -160,51 +160,54 @@
   }
 
   async function submitEntry() {
-    const name = document.getElementById("r-name").value.trim();
-    const ig = document.getElementById("r-ig").value.trim();
-    const phone = document.getElementById("r-phone").value.trim();
-    const size = document.getElementById("r-size").value;
+  const name = document.getElementById("r-name").value.trim();
+  const ig = document.getElementById("r-ig").value.trim();
+  const phone = document.getElementById("r-phone").value.trim();
+  const size = document.getElementById("r-size").value;
 
-    if (!name || !ig || !phone || !size) return alert("Complete all fields.");
+  if (!name || !ig || !phone || !size) return alert("Complete all fields.");
 
-    const btn = document.getElementById("final-submit");
-    btn.disabled = true;
-    btn.textContent = "Processing...";
+  const btn = document.getElementById("final-submit");
+  btn.disabled = true;
+  btn.textContent = "Processing...";
 
-    const orderData = {
-      name,
-      ig,
-      phone,
-      size,
-      product: p.name,
-      price: p.price,
-      timestamp: new Date().toLocaleString('fr-MA')
-    };
+  const orderData = {
+    name,
+    ig,
+    phone,
+    size,
+    product: p.name,
+    price: p.price,
+    timestamp: new Date().toLocaleString('fr-MA')
+  };
 
-    try {
-      const response = await fetch(`${BACKEND_URL}/order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      });
+  try {
+    const response = await fetch(`${BACKEND_URL}/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
 
-      if (!response.ok) throw new Error();
-
-      const result = await response.json();
-
-      if (result.success) {
-        document.getElementById("final-submit").style.display = "none";
-        document.getElementById("success").style.display = "block";
-      } else {
-        alert("Failed – try again");
-      }
-    } catch (err) {
-      alert("No connection");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "SUBMIT TO THE VOID";
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
+
+    const result = await response.json();
+
+    if (result.success) {
+      document.getElementById("final-submit").style.display = "none";
+      document.getElementById("success").style.display = "block";
+    } else {
+      alert("Order failed – try again");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("No connection – check internet or server");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "SUBMIT TO THE VOID";
   }
+}
 
   if (!/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
     const container = document.getElementById("product-particles");
