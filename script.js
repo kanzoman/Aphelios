@@ -1,5 +1,5 @@
 // PASSWORD (change this!)
-const correctPassword = "bloodmoon2025";
+const correctPassword = "Dracula";
 
 function checkPassword() {
   const input = document.getElementById("password-input").value;
