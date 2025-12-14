@@ -14,6 +14,13 @@ function checkPassword() {
   }
 }
 
+// Allow Enter key
+  document.getElementById("password-input").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      checkPassword();
+    }
+  });
+  
 // COUNTDOWN TO NEXT DROP (set your date here)
 const dropDate = new Date("2025-12-20T22:00:00").getTime();
 
