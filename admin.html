@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APHELIOS ORDERS — ECLIPSE MODE</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: linear-gradient(135deg, #000, #0a0000); padding: 40px 20px; min-height: 100vh; }
+    h1 { 
+      text-align: center; font-size: 5rem; font-weight: 900; 
+      background: linear-gradient(45deg, #9B111E, #ff3333, #9B111E); 
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 60px rgba(155,17,30,0.8); animation: bloodglow 2s infinite alternate;
+    }
+    @keyframes bloodglow { from { filter: drop-shadow(0 0 20px #9B111E); } to { filter: drop-shadow(0 0 60px #ff3333); } }
+
+    .container { max-width: 1400px; margin: 0 auto; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 15px; }
+    thead th { 
+      background: linear-gradient(to right, #0a0000, #1a0000); 
+      padding: 25px; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 3px;
+      border-bottom: 3px solid #9B111E; box-shadow: 0 10px 30px rgba(155,17,30,0.3);
+    }
+    tbody tr { 
+      background: rgba(10,0,0,0.8); backdrop-filter: blur(15px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6); transition: all 0.4s;
+      border-radius: 20px; overflow: hidden;
+    }
+    tbody tr:hover { 
+      transform: translateY(-10px) scale(1.02); 
+      box-shadow: 0 40px 80px rgba(155,17,30,0.6); 
+      background: rgba(20,0,0,0.9);
+    }
+    td { padding: 25px; font-size: 1.2rem; border-bottom: 1px solid rgba(155,17,30,0.2); color: #ccc; }
+    .price { font-weight: 900; font-size: 1.5rem; color: #ff3333; text-shadow: 0 0 20px #9B111E; }
+
+    @media (max-width:768px) {
+      h1 { font-size: 3rem; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tbody tr { margin-bottom: 30px; border-radius: 20px; padding: 20px; }
+      td { 
+        display: block; text-align: right; padding: 15px 20px; 
+        position: relative; padding-left: 50%; font-size: 1.1rem;
+      }
+      td:before { 
+        content: attr(data-label); position: absolute; left: 20px; width: 45%; 
+        font-weight: bold; color: #9B111E; text-align: left; text-transform: uppercase; letter-spacing: 1px;
+      }
+      .price { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>APHELIOS ORDERS</h1>
+    <div id="orders-table"></div>
+  </div>
+
+  <script>
+    const BACKEND_URL = 'https://aphelios-production-a486.up.railway.app';
+
+    fetch(`${BACKEND_URL}/orders`)
+      .then(r => r.json())
+      .then(orders => {
+        let html = `
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>IG</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Size</th>
+                <th>Product</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>`;
+        orders.forEach(o => {
+          html += `
+            <tr>
+              <td data-label="ID">${o.order_id}</td>
+              <td data-label="Date">${o.timestamp || o.created_at}</td>
+              <td data-label="Name">${o.name}</td>
+              <td data-label="IG">${o.ig || '-'}</td>
+              <td data-label="Phone">${o.phone}</td>
+              <td data-label="Address">${o.address || '-'}</td>
+              <td data-label="Size">${o.size || '-'}</td>
+              <td data-label="Product">${o.product}</td>
+              <td data-label="Price" class="price">${o.price || '25 000 MAD'}</td>
+            </tr>`;
+        });
+        html += `</tbody></table>`;
+        document.getElementById('orders-table').innerHTML = orders.length ? html : '<p style="text-align:center;color:#666;font-size:1.5rem;margin-top:100px;">No claims yet — the eclipse awaits</p>';
+      })
+      .catch(() => {
+        document.getElementById('orders-table').innerHTML = '<p style="text-align:center;color:#9B111E;">Error loading orders</p>';
+      });
+  </script>
+</body>
+</html>
